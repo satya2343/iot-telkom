@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MonitoringSearch */
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'status',
             'tegangan',
             'arus',
-            // 'waktu_update',
+             'waktu_update',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
