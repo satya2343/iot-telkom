@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'status',
             'tegangan',
             'arus',
-             'waktu_update',
+            'waktu_update',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
