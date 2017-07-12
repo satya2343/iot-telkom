@@ -40,7 +40,7 @@ $('.btn-modal').on('click', function(e) {
     });
 })
 
-$('.ajax-delete').on('click', function(e){
+$('.content').on('click', '.ajax-delete', function(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     var status = confirm('apakah anda yakin?');
@@ -55,6 +55,27 @@ $('.ajax-delete').on('click', function(e){
     }
 })
 
+$('.content').on('click', '.ajax-bulk-delete',function(e){
+    var data = $('#grid-tempat').yiiGridView('getSelectedRows');
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    $.ajax($(this).attr('href'),{
+        type : 'POST',
+        dataType : 'json',
+        data : {selected : data},
+        success : function(result) {
+            alert(data);
+            console.log(result);
+            $.pjax.reload({container : '#pjax-grid'});
+        }
+    });
+})
+
+$('.content').on('click', '.select-on-check-all', function(e) {
+    $('input[type=checkbox]').prop('checked', true)
+})
+
 JS;
 
 $this->registerJs($script);
@@ -66,9 +87,11 @@ $this->registerJs($script);
 
     <p>
         <?= Html::a('Create Tempat', ['create'], ['class' => 'btn btn-success btn-modal']) ?>
+        <?= Html::a('Delete Selected', ['bulk-delete'], ['class' => 'btn btn-danger ajax-bulk-delete']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'id' => 'grid-tempat',
         'pjax' => true,
         'pjaxSettings' => [
             'neverTimeout' =>true,
@@ -81,7 +104,10 @@ $this->registerJs($script);
         ],
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'kartik\grid\CheckboxColumn'],
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'name' => 'checkbox-tempat',
+            ],
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
@@ -94,8 +120,11 @@ $this->registerJs($script);
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'delete' => function($url, $model, $key){
-                        return Html::a('', ['delete', 'id' => $model->id], ['class' => 'glyphicon glyphicon-trash ajax-delete', 'data-method' => 'POST']);
+                        return Html::a('', ['delete', 'id' => $model->id], ['class' => 'glyphicon glyphicon-trash ajax-delete', 'data-method' => 'POST', 'data-pjax' => 0]);
                     }
+                ],
+                'options' => [
+                    'data-pjax' => 0
                 ]
             ],
         ],

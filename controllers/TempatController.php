@@ -127,4 +127,21 @@ class TempatController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionBulkDelete()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = $_POST['selected'];
+//        echo $data;
+        foreach ($data as $item){
+            $model = $this->findModel($item);
+            $model->delete();
+        }
+
+        return  1;
+
+//        return $data;
+//        return $this->redirect(['/monitoring']);
+
+    }
 }
